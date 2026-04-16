@@ -168,7 +168,7 @@ export default function AdminDashboard() {
           onClick={() => setActiveTab("archivos")}
           className={`px-4 py-2 font-bold rounded-md transition-colors ${activeTab === 'archivos' ? 'bg-imeesdm-dark text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
         >
-          📁 Cargar CVs y Reportes
+          🖼️ Gestor Multimedia
         </button>
       </div>
 
