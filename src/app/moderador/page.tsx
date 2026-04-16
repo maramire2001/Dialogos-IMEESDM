@@ -64,10 +64,15 @@ export default function ModeradorDashboard() {
     }
   };
 
+  const [activeTab, setActiveTab] = useState<"asistentes" | "archivos">("asistentes");
+  // Esta línea la ignoramos porque estamos en el Dashboard de moderador
+  const [filtroSesion, setFiltroSesion] = useState("Conferencia Magistral");
+
+  const preguntasFiltradas = preguntas.filter(q => q.sesion === filtroSesion);
+
   const analizarConIA = async () => {
-    // Only analyze pending or unanalyzed questions if we wanted to filter, but let's just analyze everything for the demo event.
-    if (preguntas.length === 0) {
-      alert("No hay preguntas para analizar");
+    if (preguntasFiltradas.length === 0) {
+      alert("No hay preguntas en esta sesión para analizar");
       return;
     }
 
@@ -77,7 +82,7 @@ export default function ModeradorDashboard() {
       const response = await fetch("/api/moderar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ questions: preguntas })
+        body: JSON.stringify({ questions: preguntasFiltradas })
       });
 
       const data = await response.json();
@@ -97,7 +102,7 @@ export default function ModeradorDashboard() {
 
   const markAsRead = async (id: string) => {
     const { error } = await supabase.from("preguntas").update({ 
-      estado: "leída" // We could also append the moderator's name to the DB if we wanted advanced auditing.
+      estado: "leída"
     }).eq("id", id);
     if (!error) {
       setPreguntas(prev => prev.map(p => p.id === id ? { ...p, estado: "leída" } : p));
@@ -161,20 +166,30 @@ export default function ModeradorDashboard() {
           </p>
         </div>
         
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
+          <select 
+            value={filtroSesion}
+            onChange={(e) => setFiltroSesion(e.target.value)}
+            className="border-2 border-indigo-200 rounded-md px-3 py-2 text-indigo-800 font-bold bg-indigo-50"
+          >
+            <option value="Conferencia Magistral">Viendo: Conferencia Magistral</option>
+            <option value="Mesa 1">Viendo: Mesa 1</option>
+            <option value="Mesa 2">Viendo: Mesa 2</option>
+          </select>
+
           <div className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md flex flex-col items-center justify-center">
-            <span className="text-xs uppercase font-bold">Total</span>
-            <span className="text-xl font-black">{preguntas.length}</span>
+            <span className="text-xs uppercase font-bold">Inbox ({filtroSesion})</span>
+            <span className="text-xl font-black">{preguntasFiltradas.length}</span>
           </div>
           <button 
             onClick={analizarConIA}
-            disabled={analyzing || preguntas.length === 0}
+            disabled={analyzing || preguntasFiltradas.length === 0}
             className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-md hover:shadow-lg transition-all flex flex-col items-center justify-center disabled:opacity-50"
           >
              <span className="font-bold flex items-center gap-1">
-               {analyzing ? "🧠 Procesando..." : "🧠 Agrupar con IA (Groq)"}
+               {analyzing ? "🧠 Procesando..." : "🧠 Agrupar Sesión Actual"}
              </span>
-             <span className="text-[10px] opacity-80 uppercase">Filtrar preguntas</span>
+             <span className="text-[10px] opacity-80 uppercase">Solo para {filtroSesion}</span>
           </button>
         </div>
       </div>
@@ -183,7 +198,7 @@ export default function ModeradorDashboard() {
         <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl shadow-sm p-6 border border-indigo-100 animate-in slide-in-from-top-4">
           <div className="flex items-center justify-between mb-4 border-b border-indigo-100 pb-2">
             <h3 className="text-lg font-black text-indigo-900 flex items-center gap-2">
-              🧠 Síntesis de Inteligencia Artificial (Llama 3)
+              🧠 Síntesis de Inteligencia Artificial ({filtroSesion})
             </h3>
             <span className="text-xs font-medium bg-red-100 text-red-700 px-2 py-1 rounded-full">
               {aiAnalysis.descartadas} preguntas descartadas
@@ -207,14 +222,14 @@ export default function ModeradorDashboard() {
       )}
 
       <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-        <div className="p-4 bg-gray-50 border-b border-gray-200">
-          <h3 className="font-bold text-gray-700 uppercase text-xs">Bandeja de Entrada en tiempo real</h3>
+        <div className="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="font-bold text-gray-700 uppercase text-xs">Bandeja de Entrada: {filtroSesion}</h3>
         </div>
         <ul className="divide-y divide-gray-100 max-h-[600px] overflow-y-auto">
-          {preguntas.length === 0 ? (
-            <li className="p-8 text-center text-gray-400">Aún no hay preguntas. Comparte el código QR.</li>
+          {preguntasFiltradas.length === 0 ? (
+            <li className="p-8 text-center text-gray-400">Aún no hay preguntas para esta sesión.</li>
           ) : (
-            preguntas.map((q) => (
+            preguntasFiltradas.map((q) => (
               <li key={q.id} className={`p-4 transition-colors ${q.estado === 'leída' ? 'bg-gray-50 opacity-60' : 'hover:bg-gray-50'}`}>
                 <div className="flex justify-between items-start gap-4">
                   <div className="flex-1">

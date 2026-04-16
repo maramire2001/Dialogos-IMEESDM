@@ -1,13 +1,23 @@
 -- EJECUTA ESTO EN EL EDITOR SQL DE SUPABASE
--- Crea la tabla para almacenar las preguntas del público
+-- Nota: Si la tabla ya existe y te marca error, ejecuta la línea ALTER TABLE de hasta abajo.
+
 CREATE TABLE preguntas (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     autor TEXT DEFAULT 'Anónimo',
     pregunta TEXT NOT NULL,
+    sesion TEXT NOT NULL DEFAULT 'Conferencia Magistral',
     tema_ia TEXT,
     estado TEXT DEFAULT 'pendiente',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
 );
+
+-- Habilitar la seguridad RLS
+ALTER TABLE preguntas ENABLE ROW LEVEL SECURITY;
+
+-- ... políticas ocultas para ahorrar espacio (ya están abajo en el archivo) ...
+
+-- SI LA TABLA YA EXISTÍA, CORRE SOLO ESTO PARA AGREGAR LA NUEVA COLUMNA:
+-- ALTER TABLE preguntas ADD COLUMN sesion TEXT NOT NULL DEFAULT 'Conferencia Magistral';
 
 -- Habilitar la seguridad RLS
 ALTER TABLE preguntas ENABLE ROW LEVEL SECURITY;

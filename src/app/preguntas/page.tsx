@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 export default function PreguntasPage() {
   const [autor, setAutor] = useState("");
   const [pregunta, setPregunta] = useState("");
+  const [sesion, setSesion] = useState("Conferencia Magistral");
   const [enviado, setEnviado] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -18,14 +19,15 @@ export default function PreguntasPage() {
     const { error } = await supabase.from("preguntas").insert([
       { 
         autor: autor.trim() ? autor.trim() : "Anónimo", 
-        pregunta: pregunta.trim() 
+        pregunta: pregunta.trim(),
+        sesion: sesion
       }
     ]);
 
     setLoading(false);
 
     if (error) {
-      alert("Hubo un error al enviar tu pregunta. Por favor intenta de nuevo.");
+      alert("Hubo un error al enviar tu pregunta. Asegúrate de haber actualizado la base de datos.");
       console.error(error);
     } else {
       setEnviado(true);
@@ -40,7 +42,7 @@ export default function PreguntasPage() {
         <div className="text-center">
           <h2 className="mt-6 text-3xl font-extrabold text-imeesdm-dark">Foro de Discusión</h2>
           <p className="mt-2 text-sm text-gray-600">
-            Envía tu pregunta al ponente. El equipo de moderación la revisará en tiempo real.
+            Selecciona la mesa y envía tu pregunta en vivo. La Inteligencia Artificial la clasificará para el moderador.
           </p>
         </div>
         
@@ -63,6 +65,24 @@ export default function PreguntasPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
+            <div>
+              <label htmlFor="sesion" className="block text-sm font-medium text-gray-700 mb-1">
+                ¿A qué sesión va dirigida tu pregunta? *
+              </label>
+              <select
+                id="sesion"
+                name="sesion"
+                required
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-imeesdm-gold focus:border-imeesdm-gold sm:text-sm font-bold text-imeesdm-dark"
+                value={sesion}
+                onChange={(e) => setSesion(e.target.value)}
+              >
+                <option value="Conferencia Magistral">Conferencia Magistral</option>
+                <option value="Mesa 1">Mesa 1</option>
+                <option value="Mesa 2">Mesa 2</option>
+              </select>
+            </div>
+
             <div>
               <label htmlFor="autor" className="block text-sm font-medium text-gray-700 mb-1">
                 Tu Nombre (Opcional)
@@ -101,7 +121,7 @@ export default function PreguntasPage() {
               disabled={loading || !pregunta.trim()}
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-imeesdm-dark hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-imeesdm-dark disabled:bg-gray-400 transition-colors"
             >
-              {loading ? "Enviando..." : "Enviar Pregunta"}
+              {loading ? "Enviando..." : "Enviar a Moderación"}
             </button>
           </div>
         </form>
