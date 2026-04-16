@@ -49,9 +49,15 @@ export default function ModeradorDashboard() {
     }
   }, [isAuthenticated]);
 
+  const [form, setForm] = useState({ nombre: "", password: "" });
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "IMEESDM2026" || password === "admin123") {
+    if (!form.nombre.trim()) {
+      alert("Por favor ingresa tu nombre de moderador.");
+      return;
+    }
+    if (form.password === "IMEESDM2026" || form.password === "admin123") {
       setIsAuthenticated(true);
     } else {
       alert("Contraseña incorrecta");
@@ -90,7 +96,9 @@ export default function ModeradorDashboard() {
   };
 
   const markAsRead = async (id: string) => {
-    const { error } = await supabase.from("preguntas").update({ estado: "leída" }).eq("id", id);
+    const { error } = await supabase.from("preguntas").update({ 
+      estado: "leída" // We could also append the moderator's name to the DB if we wanted advanced auditing.
+    }).eq("id", id);
     if (!error) {
       setPreguntas(prev => prev.map(p => p.id === id ? { ...p, estado: "leída" } : p));
     }
@@ -100,19 +108,30 @@ export default function ModeradorDashboard() {
     return (
       <div className="flex justify-center items-center h-[60vh]">
         <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm border-t-4 border-imeesdm-gold">
-          <h2 className="text-2xl font-bold text-imeesdm-dark mb-6 text-center">Acceso Moderadores</h2>
+          <h2 className="text-2xl font-bold text-imeesdm-dark mb-2 text-center">Acceso Moderadores</h2>
+          <p className="text-sm text-gray-500 text-center mb-6">Identifícate para ingresar al panel de control de preguntas en vivo.</p>
           <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre o Mesa de Moderación</label>
+              <input 
+                type="text" 
+                value={form.nombre}
+                onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold text-gray-800"
+                placeholder="Ej. Moderador Principal"
+              />
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
               <input 
                 type="password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold"
-                placeholder="Ingresa tu clave"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold text-gray-800"
+                placeholder="Ingresa clave del evento"
               />
             </div>
-            <button type="submit" className="w-full bg-imeesdm-dark text-white font-bold py-2 rounded-md hover:bg-black transition-colors">
+            <button type="submit" className="w-full bg-imeesdm-dark text-white font-bold py-2 rounded-md hover:bg-black transition-colors shadow-sm">
               Ingresar al Foro
             </button>
           </form>
@@ -126,7 +145,9 @@ export default function ModeradorDashboard() {
       <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-imeesdm-dark flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-imeesdm-dark">Panel de Moderación en Vivo</h2>
-          <p className="text-gray-500 text-sm mt-1">Las preguntas de la audiencia aparecerán aquí automáticamente.</p>
+          <p className="text-gray-500 text-sm mt-1">
+            Moderadando como: <span className="font-bold text-imeesdm-gold">{form.nombre}</span>
+          </p>
         </div>
         
         <div className="flex gap-3">

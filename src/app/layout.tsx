@@ -32,9 +32,13 @@ export default function RootLayout({
 
         <footer className="bg-gray-100 border-t border-gray-200 mt-auto py-6">
           <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-            <div className="text-sm text-gray-400 font-medium mb-4 md:mb-0">
+            <div className="text-sm text-gray-400 font-medium mb-4 md:mb-0 flex gap-4">
               <a href="/admin" className="hover:text-imeesdm-dark transition-colors">
-                🔐 Acceso Administración
+                🔐 Administración
+              </a>
+              <span className="text-gray-300">|</span>
+              <a href="/moderador" className="hover:text-indigo-600 transition-colors">
+                🧠 Moderadores
               </a>
             </div>
             
