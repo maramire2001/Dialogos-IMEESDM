@@ -104,6 +104,17 @@ export default function ModeradorDashboard() {
     }
   };
 
+  const deletePregunta = async (id: string) => {
+    if (window.confirm("¿Seguro que deseas borrar esta pregunta de prueba permanentemente?")) {
+      const { error } = await supabase.from("preguntas").delete().eq("id", id);
+      if (!error) {
+        setPreguntas(prev => prev.filter(p => p.id !== id));
+      } else {
+        alert("Hubo un error borrando la pregunta: " + error.message);
+      }
+    }
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="flex justify-center items-center h-[60vh]">
@@ -213,16 +224,23 @@ export default function ModeradorDashboard() {
                     </div>
                     <p className="text-gray-800">{q.pregunta}</p>
                   </div>
-                  <div>
+                  <div className="flex flex-col gap-2 relative z-10">
+                    <button 
+                      onClick={() => deletePregunta(q.id)}
+                      className="text-xs text-red-500 hover:text-red-700 bg-red-50 px-3 py-1 rounded-full font-medium hover:bg-red-100 transition-colors"
+                      title="Borrar de la base de datos"
+                    >
+                      🗑️ Borrar
+                    </button>
                     {q.estado !== 'leída' ? (
                       <button 
                         onClick={() => markAsRead(q.id)}
                         className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium hover:bg-green-200 transition-colors"
                       >
-                        Marcar Leída
+                        ✓ Leída
                       </button>
                     ) : (
-                      <span className="text-xs bg-gray-200 text-gray-500 px-3 py-1 rounded-full font-medium">Leída ✓</span>
+                      <span className="text-xs bg-gray-200 text-gray-500 px-3 py-1 rounded-full font-medium text-center">Leída</span>
                     )}
                   </div>
                 </div>

@@ -4,6 +4,16 @@ import RegistrationForm from "@/components/RegistrationForm";
 export default function Home() {
   return (
     <div className="flex flex-col gap-10">
+      
+      {/* Botón Destacado hacia Programa y CVs */}
+      <div className="bg-gradient-to-r from-imeesdm-dark to-black rounded-xl p-6 text-center shadow-lg border border-gray-700 animate-in fade-in slide-in-from-top-4">
+        <h3 className="text-xl font-bold text-white mb-2">Consulta el Programa y Ponentes</h3>
+        <p className="text-gray-300 text-sm mb-4">Currículums, semblanzas y material oficial del evento disponible aquí.</p>
+        <a href="/programa" className="inline-flex items-center gap-2 bg-imeesdm-gold text-imeesdm-dark font-bold px-6 py-3 rounded-lg hover:brightness-110 transition-all shadow-md">
+          <span>📄</span> Ver Programa Oficial
+        </a>
+      </div>
+
       <section className="bg-white rounded-xl shadow-sm p-8 text-center border-t-4 border-imeesdm-gold">
         <h2 className="text-3xl font-bold text-imeesdm-dark mb-4">
           Bienvenidos al Evento
