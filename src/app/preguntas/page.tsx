@@ -37,7 +37,11 @@ export default function PreguntasPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-12 px-4 border-t-4 border-imeesdm-gold min-h-[70vh] bg-white rounded-xl shadow-sm mt-8">
+    <div className="space-y-4">
+      <a href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-imeesdm-dark transition-colors font-medium">
+        ← Volver al inicio
+      </a>
+    <div className="flex flex-col items-center justify-center py-12 px-4 border-t-4 border-imeesdm-gold min-h-[70vh] bg-white rounded-xl shadow-sm">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="mt-6 text-3xl font-extrabold text-imeesdm-dark">Foro de Discusión</h2>
@@ -129,6 +133,7 @@ export default function PreguntasPage() {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 }

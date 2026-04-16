@@ -18,21 +18,23 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${inter.className} bg-imeesdm-light text-imeesdm-gray min-h-screen flex flex-col`}>
         <header className="bg-imeesdm-dark text-white shadow-md sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex items-center gap-4">
-            <img 
-              src="/logo-imeesdn.jpeg" 
-              alt="Escudo I.M.E.E.S.D.N." 
-              className="h-12 md:h-14 object-contain flex-shrink-0"
-            />
-            <div className="leading-tight">
-              <h1 className="font-bold text-lg md:text-xl">
-                XI Diálogos en el Instituto
-              </h1>
-              <p className="text-xs md:text-sm text-imeesdm-gold font-medium leading-snug">
-                Instituto Mexicano de Estudios Estratégicos<br className="hidden md:block" /> en Seguridad y Defensa Nacionales
-              </p>
-              <p className="text-[10px] text-gray-300 font-bold tracking-widest">I.M.E.E.S.D.N.</p>
-            </div>
+          <div className="container mx-auto px-4 py-3">
+            <a href="/" className="flex items-center gap-4 no-underline text-white hover:opacity-90 transition-opacity">
+              <img 
+                src="/logo-imeesdn.jpeg" 
+                alt="Escudo I.M.E.E.S.D.N." 
+                className="h-12 md:h-14 object-contain flex-shrink-0"
+              />
+              <div className="leading-tight">
+                <h1 className="font-bold text-lg md:text-xl">
+                  XI Diálogos en el Instituto
+                </h1>
+                <p className="text-xs md:text-sm text-imeesdm-gold font-medium leading-snug">
+                  Instituto Mexicano de Estudios Estratégicos<br className="hidden md:block" /> en Seguridad y Defensa Nacionales
+                </p>
+                <p className="text-[10px] text-gray-300 font-bold tracking-widest">I.M.E.E.S.D.N.</p>
+              </div>
+            </a>
           </div>
         </header>
         

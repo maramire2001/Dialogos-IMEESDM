@@ -46,6 +46,9 @@ export default function ProgramaPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in py-8">
+      <a href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-imeesdm-dark transition-colors font-medium">
+        ← Volver al inicio
+      </a>
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-extrabold text-imeesdm-dark">Portal Oficial del Evento</h1>
         <p className="text-lg text-gray-600">
