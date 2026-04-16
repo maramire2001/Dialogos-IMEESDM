@@ -22,7 +22,7 @@ export default function RootLayout({
             <img 
               src="/logo-imeesdn.jpeg" 
               alt="Escudo I.M.E.E.S.D.N." 
-              className="h-14 w-14 rounded-full border-2 border-imeesdm-gold object-cover flex-shrink-0"
+              className="h-12 md:h-14 object-contain flex-shrink-0"
             />
             <div className="leading-tight">
               <h1 className="font-bold text-lg md:text-xl">

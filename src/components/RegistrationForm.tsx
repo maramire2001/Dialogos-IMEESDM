@@ -8,9 +8,16 @@ export default function RegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [aceptaPrivacidad, setAceptaPrivacidad] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (!aceptaPrivacidad) {
+      setErrorMsg("Debes aceptar el Aviso de Privacidad para completar tu registro.");
+      return;
+    }
+
     setIsSubmitting(true);
     setErrorMsg("");
 
@@ -128,11 +135,21 @@ export default function RegistrationForm() {
             <option value="Alumno">Alumno</option>
             <option value="Discente (Militar Activo)">Discente (Militar Activo)</option>
             <option value="Discente (Militar en Retiro)">Discente (Militar en Retiro)</option>
-            <option value="Docente">Docente</option>
-            <option value="Académico">Académico</option>
-            <option value="Investigador">Investigador</option>
+            <option value="Docente">Docente (Catedrático / Profesor)</option>
+            <option value="Investigador">Investigador (Investigación científica / Publicaciones)</option>
+            <option value="Académico">Académico (Gestión académica / Coordinación / Consultoría)</option>
           </select>
         </div>
+
+        {/* Nota informativa de perfil */}
+        {(profile === "Docente" || profile === "Investigador" || profile === "Académico") && (
+          <div className="md:col-span-2 bg-blue-50 border border-blue-100 rounded-lg p-4 text-sm text-blue-800">
+            <strong>Nota sobre tu perfil:</strong>{" "}
+            {profile === "Docente" && "Si tu vocación principal es la enseñanza y la formación de alumnos frente a grupo, has elegido correctamente la opción de Docente."}
+            {profile === "Investigador" && "Si tu labor central es la generación de conocimiento científico, el desarrollo de proyectos y la publicación de hallazgos académicos, has elegido correctamente la opción de Investigador."}
+            {profile === "Académico" && "Si desempeñas funciones de gestión, coordinación de programas, diseño curricular o actividades de apoyo a la vida institucional, has elegido correctamente la opción de Académico."}
+          </div>
+        )}
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Institución de procedencia *</label>
@@ -234,17 +251,43 @@ export default function RegistrationForm() {
         </div>
       )}
 
+      {/* AVISO DE PRIVACIDAD */}
+      <div className="mt-6 bg-gray-50 border border-gray-200 rounded-xl p-5">
+        <h4 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+          🔒 Aviso de Privacidad
+        </h4>
+        <div className="text-xs text-gray-600 leading-relaxed mb-4 max-h-32 overflow-y-auto pr-2">
+          <p>
+            Los datos personales que nos proporciones serán protegidos, incorporados y tratados bajo nuestra Política de Privacidad, en estricto cumplimiento con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares.
+          </p>
+          <p className="mt-2">
+            La información recabada se utilizará exclusivamente para gestionar tu registro en la plataforma, validar tu perfil profesional según las categorías anteriormente descritas y enviarte notificaciones académicas oficiales, asegurando que tus datos no serán compartidos con terceros sin tu consentimiento previo.
+          </p>
+          <p className="mt-2">
+            Al hacer clic en &quot;Aceptar&quot;, confirmas que has leído y aceptas los términos de nuestro aviso de privacidad integral, donde podrás consultar el procedimiento para ejercer tus Derechos ARCO (Acceso, Rectificación, Cancelación y Oposición).
+          </p>
+        </div>
+        <label className="flex items-start gap-3 cursor-pointer group">
+          <input 
+            type="checkbox" 
+            checked={aceptaPrivacidad}
+            onChange={(e) => setAceptaPrivacidad(e.target.checked)}
+            className="mt-0.5 h-5 w-5 rounded border-gray-300 text-imeesdm-dark focus:ring-imeesdm-gold cursor-pointer"
+          />
+          <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
+            <strong>Acepto</strong> el Aviso de Privacidad y autorizo el tratamiento de mis datos personales conforme a lo descrito.
+          </span>
+        </label>
+      </div>
+
       <div className="pt-4">
         <button 
           type="submit" 
-          disabled={isSubmitting}
-          className="w-full bg-imeesdm-dark hover:bg-black text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors disabled:bg-gray-400"
+          disabled={isSubmitting || !aceptaPrivacidad}
+          className="w-full bg-imeesdm-dark hover:bg-black text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
           {isSubmitting ? "Guardando datos..." : "Completar Registro"}
         </button>
-        <p className="text-xs text-center text-gray-500 mt-4">
-          Al registrarte aceptas las políticas de privacidad del I.M.E.E.S.D.N. Los datos serán utilizados exclusivamente con fines académicos y de seguridad del evento.
-        </p>
       </div>
     </form>
   );

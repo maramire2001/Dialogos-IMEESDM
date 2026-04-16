@@ -57,7 +57,7 @@ export default function ModeradorDashboard() {
       alert("Por favor ingresa tu nombre de moderador.");
       return;
     }
-    if (form.password === "IMEESDM2026" || form.password === "admin123") {
+    if (form.password === "IMEESDN2026" || form.password === "admin123") {
       setIsAuthenticated(true);
     } else {
       alert("Contraseña incorrecta");
