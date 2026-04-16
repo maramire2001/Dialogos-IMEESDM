@@ -34,13 +34,28 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleDelete = async (id: string, nombre: string) => {
+    if (window.confirm(`¿Estás seguro de que deseas eliminar permanentemente a ${nombre}?`)) {
+      const { error } = await supabase.from("asistentes").delete().eq("id", id);
+      if (error) {
+        alert("Hubo un error al intentar eliminar el registro.");
+        console.error(error);
+      } else {
+        // Remove from local state immediately to avoid reloading
+        setAttendees(prev => prev.filter(a => a.id !== id));
+      }
+    }
+  };
+
   const exportCsv = () => {
     if (attendees.length === 0) return;
     
-    // Simplistic CSV export
-    const headers = Object.keys(attendees[0]).join(",");
+    // Simplistic CSV export (excluding the 'id' column for cleaner output)
+    const headers = Object.keys(attendees[0]).filter(k => k !== 'id').join(",");
     const rows = attendees.map(row => 
-      Object.values(row).map(val => typeof val === "string" ? `"${val}"` : val).join(",")
+      Object.entries(row)
+        .filter(([key]) => key !== 'id')
+        .map(([_, val]) => typeof val === "string" ? `"${val}"` : val).join(",")
     );
     const csvContent = "data:text/csv;charset=utf-8," + [headers, ...rows].join("\n");
     
@@ -110,16 +125,17 @@ export default function AdminDashboard() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Perfil</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institución</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Modalidad</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-red-500 uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200 text-sm">
             {loading ? (
               <tr>
-                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">Cargando datos...</td>
+                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">Cargando datos...</td>
               </tr>
             ) : attendees.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">Aún no hay registrados.</td>
+                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">Aún no hay registrados.</td>
               </tr>
             ) : (
               attendees.map((a) => (
@@ -138,9 +154,19 @@ export default function AdminDashboard() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500">{a.institucion}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500">{a.modalidad}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button 
+                      onClick={() => handleDelete(a.id, a.nombre)}
+                      className="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-md transition-colors flex items-center justify-center"
+                      title="Eliminar Registro"
+                    >
+                      🗑️ Borrar
+                    </button>
+                  </td>
                 </tr>
               ))
             )}
+
           </tbody>
         </table>
       </div>

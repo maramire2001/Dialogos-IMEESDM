@@ -1,0 +1,7 @@
+-- EJECUTA ESTO EN TU EDITOR SQL DE SUPABASE 
+-- PARA DARLE PERMISOS AL BOTÓN DE BORRAR
+
+CREATE POLICY "Permitir borrado publico" 
+ON asistentes FOR DELETE 
+TO anon 
+USING (true);
