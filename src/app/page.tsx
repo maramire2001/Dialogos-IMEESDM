@@ -15,7 +15,7 @@ export default function Home() {
             <h3 className="text-lg font-bold text-amber-900 mb-2">Programa del Evento</h3>
             <p className="text-amber-700 text-xs mb-4">Consulta horarios, mesas y ponentes.</p>
           </div>
-          <a href="/Programa%20XI%20Di%C3%A1logos%20en%20el%20Instituto.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-amber-600 text-white font-bold px-4 py-3 rounded-lg hover:bg-amber-700 transition-all shadow-md w-full justify-center text-sm">
+          <a href="/programa-pdf" className="inline-flex items-center gap-2 bg-amber-600 text-white font-bold px-4 py-3 rounded-lg hover:bg-amber-700 transition-all shadow-md w-full justify-center text-sm">
             Abrir Programa PDF
           </a>
         </div>
