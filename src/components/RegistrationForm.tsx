@@ -83,12 +83,12 @@ export default function RegistrationForm() {
         {/* CAMPOS COMUNES */}
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-1">Nombre completo *</label>
-          <input required name="nombre" type="text" placeholder="Apellido paterno, materno y nombre(s)" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold focus:border-ieesdm-gold text-slate-800" />
+          <input required name="nombre" type="text" placeholder="Apellido paterno, materno y nombre(s)" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800" />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Grado académico *</label>
-          <select required name="grado_academico" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold focus:border-ieesdm-gold text-slate-800 bg-white">
+          <select required name="grado_academico" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800 bg-white">
             <option value="">Selecciona tu grado</option>
             <option value="Licenciatura">Licenciatura</option>
             <option value="Especialidad">Especialidad</option>
@@ -104,7 +104,7 @@ export default function RegistrationForm() {
             name="tipo_asistente"
             value={profile}
             onChange={(e) => setProfile(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold focus:border-ieesdm-gold text-slate-800 bg-white"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800 bg-white"
           >
             <option value="">Selecciona un perfil</option>
             <option value="Alumno">Alumno</option>
@@ -117,19 +117,19 @@ export default function RegistrationForm() {
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-1">Institución de procedencia *</label>
-          <input required name="institucion" type="text" placeholder="Nombre completo de tu universidad, plantel o dependencia" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold focus:border-ieesdm-gold text-slate-800" />
+          <input required name="institucion" type="text" placeholder="Nombre completo de tu universidad, plantel o dependencia" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800" />
         </div>
 
         <div>
            <label className="block text-sm font-medium text-gray-700 mb-1">Correo electrónico *</label>
-           <input required name="correo" type="email" placeholder="tucorreo@ejemplo.com" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold focus:border-ieesdm-gold text-slate-800" />
+           <input required name="correo" type="email" placeholder="tucorreo@ejemplo.com" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800" />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Modalidad de asistencia *</label>
-          <select required name="modalidad" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold focus:border-ieesdm-gold text-slate-800 bg-white">
+          <select required name="modalidad" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800 bg-white">
             <option value="">Selecciona modalidad</option>
-            <option value="Presencial">Presencial (Sede IEESDM)</option>
+            <option value="Presencial">Presencial (Sede IMEESDM)</option>
             <option value="En línea">En línea (Transmisión)</option>
           </select>
         </div>
@@ -138,18 +138,18 @@ export default function RegistrationForm() {
       {/* CAMPOS CONDICIONALES POR PERFIL */}
       {profile && (
         <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-xl">
-          <h4 className="text-sm font-bold text-ieesdm-dark uppercase mb-4 border-b pb-2">Información específica: {profile}</h4>
+          <h4 className="text-sm font-bold text-imeesdm-dark uppercase mb-4 border-b pb-2">Información específica: {profile}</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             {profile === "Alumno" && (
               <>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Carrera o programa *</label>
-                  <input required name="carrera" type="text" placeholder="Ej: Licenciatura en Relaciones Internacionales" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold" />
+                  <input required name="carrera" type="text" placeholder="Ej: Licenciatura en Relaciones Internacionales" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Semestre o año en curso</label>
-                  <input name="semestre" type="text" placeholder="Opcional" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold" />
+                  <input name="semestre" type="text" placeholder="Opcional" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
                 </div>
               </>
             )}
@@ -158,7 +158,7 @@ export default function RegistrationForm() {
               <>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Fuerza armada *</label>
-                  <select required name="fuerza_armada" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold bg-white">
+                  <select required name="fuerza_armada" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold bg-white">
                     <option value="">Selecciona tu fuerza</option>
                     <option value="Ejército Mexicano">Ejército Mexicano</option>
                     <option value="Fuerza Aérea Mexicana">Fuerza Aérea Mexicana</option>
@@ -169,15 +169,15 @@ export default function RegistrationForm() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Grado *</label>
-                  <input required name="grado_militar" type="text" placeholder="Ej: Capitán 1/o." className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold" />
+                  <input required name="grado_militar" type="text" placeholder="Ej: Capitán 1/o." className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Escuela o plantel *</label>
-                  <input required name="plantel" type="text" placeholder="Nombre completo de tu escuela o plantel militar" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold" />
+                  <input required name="plantel" type="text" placeholder="Nombre completo de tu escuela o plantel militar" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Arma, servicio o especialidad</label>
-                  <input name="especialidad_militar" type="text" placeholder="Opcional" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold" />
+                  <input name="especialidad_militar" type="text" placeholder="Opcional" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
                 </div>
               </>
             )}
@@ -185,7 +185,7 @@ export default function RegistrationForm() {
             {profile === "Docente" && (
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Área de conocimiento *</label>
-                <input required name="area_conocimiento" type="text" placeholder="Área o materia que impartes" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold" />
+                <input required name="area_conocimiento" type="text" placeholder="Área o materia que impartes" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
               </div>
             )}
 
@@ -193,11 +193,11 @@ export default function RegistrationForm() {
               <>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Línea de investigación *</label>
-                  <input required name="linea_investigacion" type="text" placeholder="Ej: Seguridad Nacional, Geopolítica" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold" />
+                  <input required name="linea_investigacion" type="text" placeholder="Ej: Seguridad Nacional, Geopolítica" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Nivel SNI o distinción</label>
-                  <input name="nivel_sni" type="text" placeholder="Opcional" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-ieesdm-gold" />
+                  <input name="nivel_sni" type="text" placeholder="Opcional" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
                 </div>
               </>
             )}
@@ -210,12 +210,12 @@ export default function RegistrationForm() {
         <button 
           type="submit" 
           disabled={isSubmitting}
-          className="w-full bg-ieesdm-dark hover:bg-black text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors disabled:bg-gray-400"
+          className="w-full bg-imeesdm-dark hover:bg-black text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors disabled:bg-gray-400"
         >
           {isSubmitting ? "Guardando datos..." : "Completar Registro"}
         </button>
         <p className="text-xs text-center text-gray-500 mt-4">
-          Al registrarte aceptas las políticas de privacidad del IEESDM. Los datos serán utilizados exclusivamente con fines académicos y de seguridad del evento.
+          Al registrarte aceptas las políticas de privacidad del IMEESDM. Los datos serán utilizados exclusivamente con fines académicos y de seguridad del evento.
         </p>
       </div>
     </form>

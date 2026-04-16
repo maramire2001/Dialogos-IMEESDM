@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "XI Diálogos en el Instituto | IEESDM",
+  title: "XI Diálogos en el Instituto | IMEESDM",
   description: "Nuevo orden mundial y Latinoamérica",
 };
 
@@ -16,12 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${inter.className} bg-ieesdm-light text-ieesdm-gray min-h-screen flex flex-col`}>
-        <header className="bg-ieesdm-dark text-white p-4 shadow-md sticky top-0 z-50">
+      <body className={`${inter.className} bg-imeesdm-light text-imeesdm-gray min-h-screen flex flex-col`}>
+        <header className="bg-imeesdm-dark text-white p-4 shadow-md sticky top-0 z-50">
           <div className="container mx-auto flex justify-between items-center">
             <h1 className="font-bold text-xl leading-tight">
               XI Diálogos en el Instituto <br />
-              <span className="text-sm font-normal text-ieesdm-gold">IEESDM</span>
+              <span className="text-sm font-normal text-imeesdm-gold">IMEESDM</span>
             </h1>
           </div>
         </header>
@@ -33,7 +33,7 @@ export default function RootLayout({
         <footer className="bg-gray-100 border-t border-gray-200 mt-auto py-6">
           <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
             <div className="text-sm text-gray-400 font-medium mb-4 md:mb-0">
-              <a href="/admin" className="hover:text-ieesdm-dark transition-colors">
+              <a href="/admin" className="hover:text-imeesdm-dark transition-colors">
                 🔐 Acceso Administración
               </a>
             </div>
