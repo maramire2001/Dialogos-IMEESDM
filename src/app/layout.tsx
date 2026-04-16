@@ -31,10 +31,13 @@ export default function RootLayout({
         </main>
 
         <footer className="bg-gray-100 border-t border-gray-200 mt-auto py-6">
-          <div className="container mx-auto px-4 text-center">
-            <p className="text-sm text-gray-500 mb-4 h-auto md:h-0 overflow-hidden md:invisible">
-              Instituto Mexicano de Estudios Estratégicos de Defensa y Seguridad Nacional
-            </p>
+          <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <div className="text-sm text-gray-400 font-medium mb-4 md:mb-0">
+              <a href="/admin" className="hover:text-ieesdm-dark transition-colors">
+                🔐 Acceso Administración
+              </a>
+            </div>
+            
             <div className="flex justify-center md:justify-end items-center space-x-6">
               <a 
                 href="https://www.facebook.com/share/18KtoCTKeg/" 
