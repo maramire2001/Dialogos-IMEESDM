@@ -4,8 +4,8 @@ import RegistrationForm from "@/components/RegistrationForm";
 export default function Home() {
   return (
     <div className="flex flex-col gap-10">
-      <section className="bg-white rounded-xl shadow-sm p-8 text-center border-t-4 border-imeesdn-gold">
-        <h2 className="text-3xl font-bold text-imeesdn-dark mb-4">
+      <section className="bg-white rounded-xl shadow-sm p-8 text-center border-t-4 border-ieesdm-gold">
+        <h2 className="text-3xl font-bold text-ieesdm-dark mb-4">
           Bienvenidos al Evento
         </h2>
         <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-6">

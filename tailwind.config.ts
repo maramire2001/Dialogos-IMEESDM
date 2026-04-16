@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        imeesdn: {
+        ieesdm: {
           dark: "#1e3a2f", // Color institucional (verde oscuro/sobrio militar)
           gold: "#bda050",  // Detalles o botones principales (oro)
           light: "#f8fafc",
