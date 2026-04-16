@@ -44,6 +44,9 @@ export default function PreguntasPage() {
           <p className="mt-2 text-sm text-gray-600">
             Selecciona la mesa y envía tu pregunta en vivo. La Inteligencia Artificial la clasificará para el moderador.
           </p>
+          <div className="mt-3 bg-amber-50 border border-amber-200 text-amber-800 text-xs rounded-lg px-4 py-2 text-left">
+            <strong>Indicación:</strong> Redacte su intervención de forma breve, clara y objetiva. Las preguntas fuera de contexto o con lenguaje inapropiado serán descartadas automáticamente por el sistema.
+          </div>
         </div>
         
         {enviado && (
@@ -56,7 +59,7 @@ export default function PreguntasPage() {
               </div>
               <div className="ml-3">
                 <p className="text-sm text-green-700 font-medium">
-                  ¡Pregunta enviada existosamente a la mesa de moderación!
+                  ¡Pregunta enviada exitosamente a la mesa de moderación!
                 </p>
               </div>
             </div>

@@ -10,8 +10,8 @@ export default function Home() {
         
         {/* Cartel de Programa */}
         <div className="bg-gradient-to-r from-imeesdm-dark to-black rounded-xl p-6 text-center shadow-lg border border-gray-700">
-          <h3 className="text-xl font-bold text-white mb-2">Consulta el Programa y Ponentes</h3>
-          <p className="text-gray-300 text-sm mb-4">Currículums y material oficial del evento disponible aquí.</p>
+          <h3 className="text-xl font-bold text-white mb-2">Programa y Ponentes</h3>
+          <p className="text-gray-300 text-sm mb-4">Currículums y material oficial del evento.</p>
           <a href="/programa" className="inline-flex items-center gap-2 bg-imeesdm-gold text-imeesdm-dark font-bold px-6 py-3 rounded-lg hover:brightness-110 transition-all shadow-md w-full justify-center">
             <span>📄</span> Ver Programa Oficial
           </a>
@@ -22,7 +22,7 @@ export default function Home() {
           <div>
             <div className="inline-block bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full mb-2">Interactivo</div>
             <h3 className="text-xl font-bold text-indigo-900 mb-2">Foro de Preguntas en Vivo</h3>
-            <p className="text-gray-500 text-sm mb-4">Manda tus dudas a la mesa o al conferencista desde aquí.</p>
+            <p className="text-gray-500 text-sm mb-4">Envía tus preguntas a la mesa o al conferencista.</p>
           </div>
           <a href="/preguntas" className="inline-flex items-center gap-2 bg-indigo-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-all shadow-md w-full justify-center">
             <span>✋</span> Hacer una Pregunta
@@ -35,17 +35,17 @@ export default function Home() {
           Bienvenidos al Evento
         </h2>
         <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-6">
-          Registro oficial para los asistentes presenciales y en línea a los "XI Diálogos en el Instituto: Nuevo orden mundial y Latinoamérica".
+          Registro oficial para los asistentes presenciales y en línea a los &quot;XI Diálogos en el Instituto: Nuevo orden mundial y Latinoamérica&quot;.
         </p>
         
         <div className="inline-block bg-blue-50 text-blue-800 px-4 py-3 rounded-lg text-sm border border-blue-100">
-          <strong>Aviso:</strong> El registro es obligatorio para acceder a cualquier función del evento y generar tu credencial de acceso.
+          <strong>Aviso:</strong> El registro es obligatorio para acceder a todas las funciones de la aplicación del evento.
         </div>
       </section>
 
       <section className="bg-white rounded-xl shadow-sm overflow-hidden">
         <div className="bg-gray-50 px-6 py-4 border-b border-gray-100">
-          <h3 className="text-xl font-semibold text-gray-800">Formulario de Registro</h3>
+          <h3 className="text-xl font-semibold text-gray-800">Formulario de registro para acceder a la app</h3>
         </div>
         <div className="p-6">
           <RegistrationForm />

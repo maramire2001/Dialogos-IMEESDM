@@ -17,15 +17,19 @@ export default function RegistrationForm() {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
+    // Concatenar nombre completo para la base de datos
+    const nombreCompleto = `${data.apellido_paterno} ${data.apellido_materno}, ${data.nombres}`;
+
     try {
       const { error } = await supabase
         .from('asistentes')
         .insert([
           {
-            nombre: data.nombre,
+            nombre: nombreCompleto,
             grado_academico: data.grado_academico,
             tipo_asistente: data.tipo_asistente,
             institucion: data.institucion,
+            tipo_institucion: data.tipo_institucion,
             correo: data.correo,
             modalidad: data.modalidad,
             carrera: data.carrera || null,
@@ -37,7 +41,7 @@ export default function RegistrationForm() {
             area_conocimiento: data.area_conocimiento || null,
             linea_investigacion: data.linea_investigacion || null,
             nivel_sni: data.nivel_sni || null,
-            verificado: false // Inicialmente falso hasta verificar email
+            verificado: true
           }
         ]);
 
@@ -60,15 +64,16 @@ export default function RegistrationForm() {
         <svg className="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 className="text-2xl font-bold text-green-800 mb-2">¡Registro completado!</h3>
+        <h3 className="text-2xl font-bold text-green-800 mb-2">¡Registro exitoso!</h3>
         <p className="text-green-700">
-          Tus datos han sido guardados en nuestra base de datos.
-          En breve recibirás un correo electrónico con tu código PIN de verificación.
-          Recuerda que deberás validarlo para asegurar tu acceso al evento.
+          Tu registro ha sido completado correctamente. Ya tienes acceso completo a todas las funciones de la aplicación del evento.
         </p>
       </div>
     );
   }
+
+  // Determinar si el perfil es de tipo Discente (Militar Activo o en Retiro)
+  const isDiscente = profile.startsWith("Discente");
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 text-left">
@@ -78,13 +83,26 @@ export default function RegistrationForm() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        {/* CAMPOS COMUNES */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Nombre completo *</label>
-          <input required name="nombre" type="text" placeholder="Apellido paterno, materno y nombre(s)" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800" />
+        {/* NOMBRE DESGLOSADO */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Nombre(s) *</label>
+          <input required name="nombres" type="text" placeholder="Ej: Juan Carlos" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800" />
         </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Apellido paterno *</label>
+          <input required name="apellido_paterno" type="text" placeholder="Ej: González" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800" />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Apellido materno *</label>
+          <input required name="apellido_materno" type="text" placeholder="Ej: López" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Grado académico *</label>
@@ -108,16 +126,26 @@ export default function RegistrationForm() {
           >
             <option value="">Selecciona un perfil</option>
             <option value="Alumno">Alumno</option>
-            <option value="Discente">Discente (Militar)</option>
+            <option value="Discente (Militar Activo)">Discente (Militar Activo)</option>
+            <option value="Discente (Militar en Retiro)">Discente (Militar en Retiro)</option>
             <option value="Docente">Docente</option>
             <option value="Académico">Académico</option>
             <option value="Investigador">Investigador</option>
           </select>
         </div>
 
-        <div className="md:col-span-2">
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Institución de procedencia *</label>
           <input required name="institucion" type="text" placeholder="Nombre completo de tu universidad, plantel o dependencia" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800" />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de institución *</label>
+          <select required name="tipo_institucion" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800 bg-white">
+            <option value="">Selecciona tipo</option>
+            <option value="Pública">Pública</option>
+            <option value="Privada">Privada</option>
+          </select>
         </div>
 
         <div>
@@ -129,7 +157,7 @@ export default function RegistrationForm() {
           <label className="block text-sm font-medium text-gray-700 mb-1">Modalidad de asistencia *</label>
           <select required name="modalidad" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800 bg-white">
             <option value="">Selecciona modalidad</option>
-            <option value="Presencial">Presencial (Sede IMEESDM)</option>
+            <option value="Presencial">Presencial (Sede I.M.E.E.S.D.N.)</option>
             <option value="En línea">En línea (Transmisión)</option>
           </select>
         </div>
@@ -154,7 +182,7 @@ export default function RegistrationForm() {
               </>
             )}
 
-            {profile === "Discente" && (
+            {isDiscente && (
               <>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Fuerza armada *</label>
@@ -215,7 +243,7 @@ export default function RegistrationForm() {
           {isSubmitting ? "Guardando datos..." : "Completar Registro"}
         </button>
         <p className="text-xs text-center text-gray-500 mt-4">
-          Al registrarte aceptas las políticas de privacidad del IMEESDM. Los datos serán utilizados exclusivamente con fines académicos y de seguridad del evento.
+          Al registrarte aceptas las políticas de privacidad del I.M.E.E.S.D.N. Los datos serán utilizados exclusivamente con fines académicos y de seguridad del evento.
         </p>
       </div>
     </form>

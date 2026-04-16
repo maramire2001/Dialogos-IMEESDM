@@ -64,8 +64,6 @@ export default function ModeradorDashboard() {
     }
   };
 
-  const [activeTab, setActiveTab] = useState<"asistentes" | "archivos">("asistentes");
-  // Esta línea la ignoramos porque estamos en el Dashboard de moderador
   const [filtroSesion, setFiltroSesion] = useState("Conferencia Magistral");
 
   const preguntasFiltradas = preguntas.filter(q => q.sesion === filtroSesion);
@@ -162,7 +160,7 @@ export default function ModeradorDashboard() {
         <div>
           <h2 className="text-2xl font-bold text-imeesdm-dark">Panel de Moderación en Vivo</h2>
           <p className="text-gray-500 text-sm mt-1">
-            Moderadando como: <span className="font-bold text-imeesdm-gold">{form.nombre}</span>
+            Moderando como: <span className="font-bold text-imeesdm-gold">{form.nombre}</span>
           </p>
         </div>
         

@@ -56,9 +56,9 @@ export default function ProgramaPage() {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 bg-imeesdm-dark text-white border-b-4 border-imeesdm-gold">
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <span>📄</span> Semblanzas y Currículums
+            <span>📄</span> Currículums de los Ponentes
           </h2>
-          <p className="text-imeesdm-light text-sm mt-1">Conoce la trayectoria de nuestros invitados.</p>
+          <p className="text-imeesdm-light text-sm mt-1">Conoce la trayectoria profesional de nuestros invitados.</p>
         </div>
         <div className="p-6 bg-gray-50">
           {loading ? (
