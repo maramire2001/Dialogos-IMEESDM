@@ -20,7 +20,7 @@ export default function RootLayout({
         <header className="bg-imeesdm-dark text-white shadow-md sticky top-0 z-50">
           <div className="container mx-auto px-4 py-3 flex items-center gap-4">
             <img 
-              src="/logo-imeesdn.svg" 
+              src="/logo-imeesdn.jpeg" 
               alt="Escudo I.M.E.E.S.D.N." 
               className="h-14 w-14 rounded-full border-2 border-imeesdm-gold object-cover flex-shrink-0"
             />

@@ -6,14 +6,29 @@ export default function Home() {
     <div className="flex flex-col gap-10">
       
       {/* Botones Destacados de la App en Vivo */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-4">
         
-        {/* Cartel de Programa */}
-        <div className="bg-gradient-to-r from-imeesdm-dark to-black rounded-xl p-6 text-center shadow-lg border border-gray-700">
-          <h3 className="text-xl font-bold text-white mb-2">Programa y Ponentes</h3>
-          <p className="text-gray-300 text-sm mb-4">Currículums y material oficial del evento.</p>
-          <a href="/programa" className="inline-flex items-center gap-2 bg-imeesdm-gold text-imeesdm-dark font-bold px-6 py-3 rounded-lg hover:brightness-110 transition-all shadow-md w-full justify-center">
-            <span>📄</span> Ver Programa Oficial
+        {/* Programa PDF */}
+        <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-6 text-center shadow-lg border-2 border-amber-300 flex flex-col justify-between">
+          <div>
+            <span className="text-4xl block mb-2">📋</span>
+            <h3 className="text-lg font-bold text-amber-900 mb-2">Programa del Evento</h3>
+            <p className="text-amber-700 text-xs mb-4">Consulta horarios, mesas y ponentes.</p>
+          </div>
+          <a href="/Programa%20XI%20Di%C3%A1logos%20en%20el%20Instituto.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-amber-600 text-white font-bold px-4 py-3 rounded-lg hover:bg-amber-700 transition-all shadow-md w-full justify-center text-sm">
+            Abrir Programa PDF
+          </a>
+        </div>
+
+        {/* Cartel de Ponentes y CVs */}
+        <div className="bg-gradient-to-r from-imeesdm-dark to-black rounded-xl p-6 text-center shadow-lg border border-gray-700 flex flex-col justify-between">
+          <div>
+            <span className="text-4xl block mb-2">📄</span>
+            <h3 className="text-lg font-bold text-white mb-2">Currículums y Galería</h3>
+            <p className="text-gray-300 text-xs mb-4">CVs de ponentes y fotos del evento.</p>
+          </div>
+          <a href="/programa" className="inline-flex items-center gap-2 bg-imeesdm-gold text-imeesdm-dark font-bold px-4 py-3 rounded-lg hover:brightness-110 transition-all shadow-md w-full justify-center text-sm">
+            Ver Portal Oficial
           </a>
         </div>
 
@@ -21,11 +36,11 @@ export default function Home() {
         <div className="bg-white rounded-xl p-6 text-center shadow-lg border-2 border-indigo-100 flex flex-col justify-between">
           <div>
             <div className="inline-block bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full mb-2">Interactivo</div>
-            <h3 className="text-xl font-bold text-indigo-900 mb-2">Foro de Preguntas en Vivo</h3>
-            <p className="text-gray-500 text-sm mb-4">Envía tus preguntas a la mesa o al conferencista.</p>
+            <h3 className="text-lg font-bold text-indigo-900 mb-2">Foro de Preguntas</h3>
+            <p className="text-gray-500 text-xs mb-4">Envía tus preguntas a la mesa o al conferencista.</p>
           </div>
-          <a href="/preguntas" className="inline-flex items-center gap-2 bg-indigo-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-all shadow-md w-full justify-center">
-            <span>✋</span> Hacer una Pregunta
+          <a href="/preguntas" className="inline-flex items-center gap-2 bg-indigo-600 text-white font-bold px-4 py-3 rounded-lg hover:bg-indigo-700 transition-all shadow-md w-full justify-center text-sm">
+            ✋ Hacer una Pregunta
           </a>
         </div>
       </div>
