@@ -79,7 +79,6 @@ export default function AdminDashboard() {
     setUploading(true);
     setUploadMessage("");
 
-    // Create a safe valid filename
     const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
 
@@ -94,10 +93,38 @@ export default function AdminDashboard() {
 
     if (error) {
       setUploadMessage("Error al subir el archivo: " + error.message);
-      console.error(error);
     } else {
-      setUploadMessage(`¡Archivo subido con éxito! Ruta: ${data.path}`);
-      // Clear input
+      setUploadMessage(`¡PDF subido con éxito!`);
+      e.target.value = "";
+    }
+  };
+
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadImgMessage, setUploadImgMessage] = useState("");
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    setUploadImgMessage("");
+
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+
+    const { data, error } = await supabase.storage
+      .from('event_assets')
+      .upload(`galeria/${fileName}`, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    setUploadingImage(false);
+
+    if (error) {
+      setUploadImgMessage("Error al subir la foto: " + error.message);
+    } else {
+      setUploadImgMessage(`¡Foto subida con éxito a la galería!`);
       e.target.value = "";
     }
   };
@@ -228,38 +255,65 @@ export default function AdminDashboard() {
       {/* Contenido de Archivos CV */}
       {activeTab === "archivos" && (
         <div className="bg-white rounded-xl shadow-md p-6 border-t-4 border-imeesdm-gold overflow-hidden">
-          <h2 className="text-2xl font-bold text-imeesdm-dark mb-2">Gestor de Archivos (CVs y Reportes)</h2>
-          <p className="text-gray-500 mb-6">Sube los currículums de los ponentes en formato PDF. Aparecerán automáticamente en la sección pública.</p>
+          <h2 className="text-2xl font-bold text-imeesdm-dark mb-2">Gestor de Contenido Multimedia</h2>
+          <p className="text-gray-500 mb-6">Sube los currículums de los ponentes en PDF o las fotografías en JPG. Aparecerán automáticamente en la sección pública.</p>
           
-          <div className="bg-gray-50 border border-dashed border-gray-300 p-8 rounded-lg text-center">
-            <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-            </svg>
-            <h3 className="text-lg font-medium text-gray-900 mb-1">Cargar nuevo documento PDF</h3>
-            <p className="text-sm text-gray-500 mb-4">Asegúrate de que el archivo pese menos de 5MB.</p>
-            
-            <div className="flex justify-center">
-              <label className="relative cursor-pointer bg-imeesdm-dark rounded-md font-medium text-white px-4 py-2 hover:bg-black focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-imeesdm-dark transition-colors">
-                <span>{uploading ? "Subiendo..." : "Seleccionar Archivo PDF"}</span>
-                <input 
-                  type="file" 
-                  className="sr-only" 
-                  accept=".pdf"
-                  disabled={uploading}
-                  onChange={handleFileUpload}
-                />
-              </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* CVs Upload */}
+            <div className="bg-gray-50 border border-dashed border-gray-300 p-6 rounded-lg text-center">
+              <span className="text-4xl mb-4 block">📄</span>
+              <h3 className="text-lg font-medium text-gray-900 mb-1">Cargar documento PDF</h3>
+              <p className="text-xs text-gray-500 mb-4">Solo para CVs o el Informe (Max 5MB).</p>
+              
+              <div className="flex justify-center">
+                <label className="relative cursor-pointer bg-imeesdm-dark rounded-md font-medium text-white px-4 py-2 hover:bg-black focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-imeesdm-dark transition-colors text-sm">
+                  <span>{uploading ? "Subiendo PDF..." : "Seleccionar PDF"}</span>
+                  <input 
+                    type="file" 
+                    className="sr-only" 
+                    accept=".pdf"
+                    disabled={uploading}
+                    onChange={handleFileUpload}
+                  />
+                </label>
+              </div>
+              
+              {uploadMessage && (
+                <p className={`mt-4 text-xs font-bold ${uploadMessage.includes('Error') ? 'text-red-500' : 'text-green-600'}`}>
+                  {uploadMessage}
+                </p>
+              )}
             </div>
-            
-            {uploadMessage && (
-              <p className={`mt-4 text-sm font-bold ${uploadMessage.includes('Error') ? 'text-red-500' : 'text-green-600'}`}>
-                {uploadMessage}
-              </p>
-            )}
+
+            {/* Photos Upload */}
+            <div className="bg-gray-50 border border-dashed border-gray-300 p-6 rounded-lg text-center">
+              <span className="text-4xl mb-4 block">📸</span>
+              <h3 className="text-lg font-medium text-gray-900 mb-1">Cargar Fotografía Oficial</h3>
+              <p className="text-xs text-gray-500 mb-4">Archivos JPG o PNG para la galería del evento.</p>
+              
+              <div className="flex justify-center">
+                <label className="relative cursor-pointer bg-indigo-600 rounded-md font-medium text-white px-4 py-2 hover:bg-indigo-700 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-600 transition-colors text-sm">
+                  <span>{uploadingImage ? "Subiendo Foto..." : "Seleccionar Imagen"}</span>
+                  <input 
+                    type="file" 
+                    className="sr-only" 
+                    accept="image/png, image/jpeg, image/jpg"
+                    disabled={uploadingImage}
+                    onChange={handleImageUpload}
+                  />
+                </label>
+              </div>
+              
+              {uploadImgMessage && (
+                <p className={`mt-4 text-xs font-bold ${uploadImgMessage.includes('Error') ? 'text-red-500' : 'text-green-600'}`}>
+                  {uploadImgMessage}
+                </p>
+              )}
+            </div>
           </div>
           
           <div className="mt-8 bg-blue-50 p-4 rounded-md border border-blue-100 text-blue-800 text-sm">
-            <strong>Instrucción para Supabase:</strong> Antes de subir el primer archivo, asegúrate de entrar a Supabase {">"} Storage {">"} New Bucket, crear uno llamado <strong>event_assets</strong> y hacerlo <em>Público</em>.
+            <strong>Instrucción para Supabase:</strong> Recuerda crear el bucket <strong>event_assets</strong> y configurarlo como <em>Público</em> en Supabase Storage.
           </div>
         </div>
       )}
