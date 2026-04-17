@@ -13,14 +13,14 @@ export default function ProgramaPDFPage() {
       
       <div className="w-full rounded-xl overflow-hidden shadow-lg border border-gray-200" style={{ height: "80vh" }}>
         <iframe 
-          src="/Programa%20XI%20Di%C3%A1logos%20en%20el%20Instituto.pdf" 
+          src="/programa-oficial.pdf" 
           className="w-full h-full"
           title="Programa del Evento"
         />
       </div>
 
       <a 
-        href="/Programa%20XI%20Di%C3%A1logos%20en%20el%20Instituto.pdf" 
+        href="/programa-oficial.pdf" 
         download
         className="text-sm text-gray-500 hover:text-imeesdm-dark underline transition-colors"
       >
