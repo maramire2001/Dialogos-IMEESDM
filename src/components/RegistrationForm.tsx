@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function RegistrationForm() {
@@ -9,10 +9,33 @@ export default function RegistrationForm() {
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [aceptaPrivacidad, setAceptaPrivacidad] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'ok' | 'fail'>('checking');
+
+  // Diagnóstico de conexión al cargar
+  useEffect(() => {
+    async function checkConnection() {
+      try {
+        // Un ping simple para ver si el servidor responde
+        const { data, error } = await supabase.from('asistentes').select('count', { count: 'exact', head: true }).limit(1);
+        if (error) throw error;
+        setConnectionStatus('ok');
+        console.log("✅ Conexión con Supabase establecida correctamente.");
+      } catch (err: any) {
+        console.error("❌ Fallo de conexión inicial:", err);
+        setConnectionStatus('fail');
+      }
+    }
+    checkConnection();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
+    if (connectionStatus === 'fail') {
+      setErrorMsg("No se puede registrar porque no hay conexión con la base de datos. Por favor, verifica tu conexión o el estado del servidor.");
+      return;
+    }
+
     if (!aceptaPrivacidad) {
       setErrorMsg("Debes aceptar el Aviso de Privacidad para completar tu registro.");
       return;
@@ -95,9 +118,41 @@ export default function RegistrationForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 text-left">
+      <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 mb-4">
+        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Estado del Sistema:</span>
+        <div className="flex items-center gap-2">
+          {connectionStatus === 'checking' && (
+            <span className="flex items-center gap-1.5 text-xs text-amber-600 font-medium animate-pulse">
+              <span className="h-2 w-2 rounded-full bg-amber-500"></span> Verificando conexión...
+            </span>
+          )}
+          {connectionStatus === 'ok' && (
+            <span className="flex items-center gap-1.5 text-xs text-green-600 font-medium">
+              <span className="h-2 w-2 rounded-full bg-green-500"></span> Conectado a la base de datos
+            </span>
+          )}
+          {connectionStatus === 'fail' && (
+            <span className="flex items-center gap-1.5 text-xs text-red-600 font-bold">
+              <span className="h-2 w-2 rounded-full bg-red-600 animate-ping"></span> Error de conexión
+            </span>
+          )}
+        </div>
+      </div>
+
       {errorMsg && (
-        <div className="p-4 bg-red-50 text-red-700 rounded-md border border-red-200">
-          {errorMsg}
+        <div className="p-4 bg-red-50 text-red-700 rounded-md border border-red-200 shadow-sm animate-in fade-in slide-in-from-top-2">
+          <div className="flex items-start gap-3">
+            <span className="text-xl">⚠️</span>
+            <div>
+              <p className="font-bold mb-1">Error al registrarte:</p>
+              <p className="text-sm opacity-90 leading-tight">{errorMsg}</p>
+              {errorMsg.includes("No se pudo conectar") && (
+                <div className="mt-3 p-2 bg-white rounded border border-red-100 text-[10px] text-red-400">
+                  Sugerencia: Reinicia tu servidor local (`npm run dev`) o verifica que el proyecto en Supabase no esté en "Paused".
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
