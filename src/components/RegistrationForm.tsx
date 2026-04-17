@@ -27,30 +27,27 @@ export default function RegistrationForm() {
     // Concatenar nombre completo para la base de datos
     const nombreCompleto = `${data.apellido_paterno} ${data.apellido_materno}, ${data.nombres}`;
 
+    // Construir objeto de inserción solo con los campos que existen en la BD
+    const registro: any = {
+      nombre: nombreCompleto,
+      correo: data.correo,
+      grado_academico: data.grado_academico,
+      tipo_asistente: data.tipo_asistente,
+      institucion: data.institucion,
+      modalidad: data.modalidad,
+      verificado: true
+    };
+
+    // Campos opcionales — solo se envían si tienen valor
+    if (data.tipo_institucion) registro.tipo_institucion = data.tipo_institucion;
+    if (data.fuerza_armada) registro.fuerza_armada = data.fuerza_armada;
+    if (data.grado_militar) registro.grado_militar = data.grado_militar;
+    if (data.plantel) registro.plantel = data.plantel;
+    if (data.especialidad_militar) registro.especialidad_militar = data.especialidad_militar;
     try {
       const { error } = await supabase
         .from('asistentes')
-        .insert([
-          {
-            nombre: nombreCompleto,
-            grado_academico: data.grado_academico,
-            tipo_asistente: data.tipo_asistente,
-            institucion: data.institucion,
-            tipo_institucion: data.tipo_institucion,
-            correo: data.correo,
-            modalidad: data.modalidad,
-            carrera: data.carrera || null,
-            semestre: data.semestre || null,
-            fuerza_armada: data.fuerza_armada || null,
-            grado_militar: data.grado_militar || null,
-            plantel: data.plantel || null,
-            especialidad_militar: data.especialidad_militar || null,
-            area_conocimiento: data.area_conocimiento || null,
-            linea_investigacion: data.linea_investigacion || null,
-            nivel_sni: data.nivel_sni || null,
-            verificado: true
-          }
-        ]);
+        .insert([registro]);
 
       if (error) {
         throw error;
@@ -66,7 +63,8 @@ export default function RegistrationForm() {
       setSubmitted(true);
     } catch (error: any) {
       console.error('Error insertando registro:', error);
-      setErrorMsg("Ocurrió un error al registrarte. Verifica si el correo ya está registrado o intenta de nuevo.");
+      const detail = error.message || error.details || JSON.stringify(error) || 'Verifica los datos e intenta de nuevo.';
+      setErrorMsg(`Error al registrarte: ${detail}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -86,8 +84,7 @@ export default function RegistrationForm() {
     );
   }
 
-  // Determinar si el perfil es de tipo Discente (Militar Activo o en Retiro)
-  const isDiscente = profile.startsWith("Discente");
+  // Ya no usamos isDiscente porque todos son militares ahora
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 text-left">
@@ -139,24 +136,11 @@ export default function RegistrationForm() {
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800 bg-white"
           >
             <option value="">Selecciona un perfil</option>
-            <option value="Alumno">Alumno</option>
-            <option value="Discente (Militar Activo)">Discente (Militar Activo)</option>
-            <option value="Discente (Militar en Retiro)">Discente (Militar en Retiro)</option>
-            <option value="Docente">Docente (Catedrático / Profesor)</option>
-            <option value="Investigador">Investigador (Investigación científica / Publicaciones)</option>
-            <option value="Académico">Académico (Gestión académica / Coordinación / Consultoría)</option>
+            <option value="Discente">Discente</option>
+            <option value="Militar Activo">Militar activo</option>
+            <option value="Militar en Retiro">Militar en retiro</option>
           </select>
         </div>
-
-        {/* Nota informativa de perfil */}
-        {(profile === "Docente" || profile === "Investigador" || profile === "Académico") && (
-          <div className="md:col-span-2 bg-blue-50 border border-blue-100 rounded-lg p-4 text-sm text-blue-800">
-            <strong>Nota sobre tu perfil:</strong>{" "}
-            {profile === "Docente" && "Si tu vocación principal es la enseñanza y la formación de alumnos frente a grupo, has elegido correctamente la opción de Docente."}
-            {profile === "Investigador" && "Si tu labor central es la generación de conocimiento científico, el desarrollo de proyectos y la publicación de hallazgos académicos, has elegido correctamente la opción de Investigador."}
-            {profile === "Académico" && "Si desempeñas funciones de gestión, coordinación de programas, diseño curricular o actividades de apoyo a la vida institucional, has elegido correctamente la opción de Académico."}
-          </div>
-        )}
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Institución de procedencia *</label>
@@ -187,72 +171,38 @@ export default function RegistrationForm() {
         </div>
       </div>
 
-      {/* CAMPOS CONDICIONALES POR PERFIL */}
+      {/* CAMPOS MILITARES — se muestran para cualquiera de los 3 perfiles */}
       {profile && (
         <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-xl">
-          <h4 className="text-sm font-bold text-imeesdm-dark uppercase mb-4 border-b pb-2">Información específica: {profile}</h4>
+          <h4 className="text-sm font-bold text-imeesdm-dark uppercase mb-4 border-b pb-2">Información militar: {profile}</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             
-            {profile === "Alumno" && (
-              <>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Carrera o programa *</label>
-                  <input required name="carrera" type="text" placeholder="Ej: Licenciatura en Relaciones Internacionales" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Semestre o año en curso</label>
-                  <input name="semestre" type="text" placeholder="Opcional" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
-                </div>
-              </>
-            )}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Fuerza armada *</label>
+              <select required name="fuerza_armada" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold bg-white text-slate-800">
+                <option value="">Selecciona tu fuerza</option>
+                <option value="Ejército Mexicano">Ejército Mexicano</option>
+                <option value="Fuerza Aérea Mexicana">Fuerza Aérea Mexicana</option>
+                <option value="Armada de México">Armada de México</option>
+                <option value="Guardia Nacional">Guardia Nacional (G.N.)</option>
+                <option value="Otra">Otra</option>
+              </select>
+            </div>
 
-            {isDiscente && (
-              <>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Fuerza armada *</label>
-                  <select required name="fuerza_armada" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold bg-white">
-                    <option value="">Selecciona tu fuerza</option>
-                    <option value="Ejército Mexicano">Ejército Mexicano</option>
-                    <option value="Fuerza Aérea Mexicana">Fuerza Aérea Mexicana</option>
-                    <option value="Armada de México">Armada de México</option>
-                    <option value="Guardia Nacional">Guardia Nacional (G.N.)</option>
-                    <option value="Otra">Otra</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Grado *</label>
-                  <input required name="grado_militar" type="text" placeholder="Ej: Capitán 1/o." className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Escuela o plantel *</label>
-                  <input required name="plantel" type="text" placeholder="Nombre completo de tu escuela o plantel militar" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Arma, servicio o especialidad</label>
-                  <input name="especialidad_militar" type="text" placeholder="Opcional" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
-                </div>
-              </>
-            )}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Grado *</label>
+              <input required name="grado_militar" type="text" placeholder="Ej: Capitán 1/o." className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold text-slate-800" />
+            </div>
 
-            {profile === "Docente" && (
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Área de conocimiento *</label>
-                <input required name="area_conocimiento" type="text" placeholder="Área o materia que impartes" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
-              </div>
-            )}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Escuela o plantel *</label>
+              <input required name="plantel" type="text" placeholder="Nombre completo de tu escuela o plantel militar" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold text-slate-800" />
+            </div>
 
-            {(profile === "Académico" || profile === "Investigador") && (
-              <>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Línea de investigación *</label>
-                  <input required name="linea_investigacion" type="text" placeholder="Ej: Seguridad Nacional, Geopolítica" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nivel SNI o distinción</label>
-                  <input name="nivel_sni" type="text" placeholder="Opcional" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold" />
-                </div>
-              </>
-            )}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Arma, servicio o especialidad</label>
+              <input name="especialidad_militar" type="text" placeholder="Opcional" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold text-slate-800" />
+            </div>
 
           </div>
         </div>
