@@ -63,7 +63,14 @@ export default function RegistrationForm() {
       setSubmitted(true);
     } catch (error: any) {
       console.error('Error insertando registro:', error);
-      const detail = error.message || error.details || JSON.stringify(error) || 'Verifica los datos e intenta de nuevo.';
+      
+      let detail = error.message || error.details || JSON.stringify(error) || 'Verifica los datos e intenta de nuevo.';
+      
+      // Manejo específico para error de conexión/configuración
+      if (detail.includes('Failed to fetch')) {
+        detail = "No se pudo conectar con el servidor. Esto puede deberse a que la URL de Supabase es incorrecta, el proyecto está pausado o tienes bloqueadores de red activos. Por favor, verifica tu conexión a internet.";
+      }
+      
       setErrorMsg(`Error al registrarte: ${detail}`);
     } finally {
       setIsSubmitting(false);
@@ -126,20 +133,55 @@ export default function RegistrationForm() {
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de asistente *</label>
-          <select 
-            required 
-            name="tipo_asistente"
-            value={profile}
-            onChange={(e) => setProfile(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold focus:border-imeesdm-gold text-slate-800 bg-white"
-          >
-            <option value="">Selecciona un perfil</option>
-            <option value="Discente">Discente</option>
-            <option value="Militar Activo">Militar activo</option>
-            <option value="Militar en Retiro">Militar en retiro</option>
-          </select>
+        <div className="md:col-span-2 bg-amber-50 p-6 rounded-xl border border-amber-200 shadow-sm transition-all hover:shadow-md">
+          <label className="block text-sm font-bold text-amber-900 mb-3 uppercase tracking-wider">
+            Perfil Profesional *
+          </label>
+          
+          <div className="text-sm text-amber-800 leading-relaxed mb-5 bg-white/50 p-4 rounded-lg border border-amber-100 italic">
+            Para brindarte una experiencia más personalizada y asegurar que la información sea relevante para tu labor, te pedimos seleccionar el perfil que mejor describa tu actividad principal:
+            <ul className="mt-3 space-y-2 not-italic">
+              <li>• Si tu vocación principal es la <strong>enseñanza</strong> y la formación de alumnos frente a grupo, elige la opción de <strong>Docente</strong>.</li>
+              <li>• En caso de que tu labor central sea la <strong>generación de conocimiento científico</strong>, el desarrollo de proyectos y la publicación de hallazgos académicos, selecciona <strong>Investigador</strong>.</li>
+              <li>• Finalmente, si desempeñas funciones de <strong>gestión, coordinación de programas, diseño curricular</strong> o actividades de apoyo a la vida institucional, la opción de <strong>Académico</strong> es la indicada para ti.</li>
+            </ul>
+            <p className="mt-4 font-bold not-italic border-t border-amber-200 pt-3">Selecciona tu perfil profesional:</p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3">
+            {[
+              { id: 'Docente', label: 'Docente', sub: 'Catedrático / Profesor' },
+              { id: 'Investigador', label: 'Investigador', sub: 'Investigación científica / Publicaciones' },
+              { id: 'Académico', label: 'Académico', sub: 'Gestión académica / Coordinación / Consultoría' }
+            ].map((opt) => (
+              <label 
+                key={opt.id}
+                className={`relative flex flex-col p-4 cursor-pointer rounded-lg border-2 transition-all ${
+                  profile === opt.id 
+                    ? 'bg-amber-100 border-imeesdm-gold shadow-sm' 
+                    : 'bg-white border-gray-200 hover:border-amber-300'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <input 
+                    type="radio" 
+                    name="tipo_asistente" 
+                    value={opt.id}
+                    checked={profile === opt.id}
+                    onChange={(e) => setProfile(e.target.value)}
+                    required
+                    className="h-5 w-5 text-imeesdm-dark focus:ring-imeesdm-gold border-gray-300 transition-colors"
+                  />
+                  <span className={`font-bold text-lg ${profile === opt.id ? 'text-imeesdm-dark' : 'text-gray-700'}`}>
+                    {opt.label}
+                  </span>
+                </div>
+                <span className="ml-8 text-sm text-gray-500 font-medium">
+                  ({opt.sub})
+                </span>
+              </label>
+            ))}
+          </div>
         </div>
 
         <div>
