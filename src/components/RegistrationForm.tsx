@@ -205,6 +205,10 @@ export default function RegistrationForm() {
 
           <div className="grid grid-cols-1 gap-3">
             {[
+              { id: 'Alumno', label: 'Alumno', sub: '' },
+              { id: 'Discente', label: 'Discente', sub: '' },
+              { id: 'Militar activo', label: 'Militar activo', sub: '' },
+              { id: 'Militar en retiro', label: 'Militar en retiro', sub: '' },
               { id: 'Docente', label: 'Docente', sub: 'Catedrático / Profesor' },
               { id: 'Investigador', label: 'Investigador', sub: 'Investigación científica / Publicaciones' },
               { id: 'Académico', label: 'Académico', sub: 'Gestión académica / Coordinación / Consultoría' }
@@ -231,9 +235,11 @@ export default function RegistrationForm() {
                     {opt.label}
                   </span>
                 </div>
-                <span className="ml-8 text-sm text-gray-500 font-medium">
-                  ({opt.sub})
-                </span>
+                {opt.sub && (
+                  <span className="ml-8 text-sm text-gray-500 font-medium mt-1">
+                    ({opt.sub})
+                  </span>
+                )}
               </label>
             ))}
           </div>
