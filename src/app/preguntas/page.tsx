@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function PreguntasPage() {
@@ -9,6 +9,20 @@ export default function PreguntasPage() {
   const [sesion, setSesion] = useState("Conferencia Magistral");
   const [enviado, setEnviado] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [registrado, setRegistrado] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const datos = localStorage.getItem('imeesdn_registrado');
+    if (datos) {
+      setRegistrado(true);
+      try {
+        const parsed = JSON.parse(datos);
+        if (parsed.nombre) setAutor(parsed.nombre);
+      } catch {}
+    } else {
+      setRegistrado(false);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +49,36 @@ export default function PreguntasPage() {
       setTimeout(() => setEnviado(false), 5000);
     }
   };
+
+  // Pantalla de carga
+  if (registrado === null) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-imeesdm-dark"></div>
+      </div>
+    );
+  }
+
+  // Bloqueo si no está registrado
+  if (!registrado) {
+    return (
+      <div className="space-y-4">
+        <a href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-imeesdm-dark transition-colors font-medium">
+          ← Volver al inicio
+        </a>
+        <div className="flex flex-col items-center justify-center py-16 px-4 bg-white rounded-xl shadow-sm border-t-4 border-red-300 text-center">
+          <span className="text-6xl mb-4">🔒</span>
+          <h2 className="text-2xl font-bold text-gray-800 mb-3">Acceso restringido</h2>
+          <p className="text-gray-600 max-w-md mb-6">
+            Para participar en el Foro de Preguntas, primero debes completar tu registro como asistente al evento.
+          </p>
+          <a href="/" className="inline-flex items-center gap-2 bg-imeesdm-dark text-white font-bold px-6 py-3 rounded-lg hover:bg-black transition-all shadow-md">
+            Ir al Registro
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">

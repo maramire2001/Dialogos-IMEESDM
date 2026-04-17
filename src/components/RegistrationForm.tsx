@@ -56,6 +56,13 @@ export default function RegistrationForm() {
         throw error;
       }
 
+      // Guardar registro en localStorage para validar acceso al foro
+      localStorage.setItem('imeesdn_registrado', JSON.stringify({
+        nombre: nombreCompleto,
+        correo: data.correo,
+        fecha: new Date().toISOString()
+      }));
+
       setSubmitted(true);
     } catch (error: any) {
       console.error('Error insertando registro:', error);

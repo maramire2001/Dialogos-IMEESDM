@@ -1,5 +1,6 @@
 import React from "react";
 import RegistrationForm from "@/components/RegistrationForm";
+import ForoButton from "@/components/ForoButton";
 
 export default function Home() {
   return (
@@ -32,17 +33,8 @@ export default function Home() {
           </a>
         </div>
 
-        {/* Cartel de Preguntas */}
-        <div className="bg-white rounded-xl p-6 text-center shadow-lg border-2 border-indigo-100 flex flex-col justify-between">
-          <div>
-            <div className="inline-block bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full mb-2">Interactivo</div>
-            <h3 className="text-lg font-bold text-indigo-900 mb-2">Foro de Preguntas</h3>
-            <p className="text-gray-500 text-xs mb-4">Envía tus preguntas a la mesa o al conferencista.</p>
-          </div>
-          <a href="/preguntas" className="inline-flex items-center gap-2 bg-indigo-600 text-white font-bold px-4 py-3 rounded-lg hover:bg-indigo-700 transition-all shadow-md w-full justify-center text-sm">
-            ✋ Hacer una Pregunta
-          </a>
-        </div>
+        {/* Cartel de Preguntas — dinámico */}
+        <ForoButton />
       </div>
 
       <section className="bg-white rounded-xl shadow-sm p-8 text-center border-t-4 border-imeesdm-gold">
