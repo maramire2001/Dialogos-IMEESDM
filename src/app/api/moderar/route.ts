@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import Groq from "groq-sdk";
 
-// Initialize the Groq client securely on the server
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
-
 export async function POST(req: NextRequest) {
+  // Initialize Groq lazily (inside the handler, not at module level)
+  // This prevents build-time errors when GROQ_API_KEY is not yet available
+  const groq = new Groq({
+    apiKey: process.env.GROQ_API_KEY,
+  });
+
   try {
     const { questions } = await req.json();
 
