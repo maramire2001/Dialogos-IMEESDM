@@ -121,32 +121,64 @@ export default function ModeradorDashboard() {
   if (!isAuthenticated) {
     return (
       <div className="flex justify-center items-center h-[60vh]">
-        <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm border-t-4 border-imeesdm-gold">
+        <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm border-t-4 border-imeesdm-gold animate-in fade-in zoom-in-95">
           <h2 className="text-2xl font-bold text-imeesdm-dark mb-2 text-center">Acceso Moderadores</h2>
-          <p className="text-sm text-gray-500 text-center mb-6">Identifícate para ingresar al panel de control de preguntas en vivo.</p>
+          <p className="text-sm text-gray-500 text-center mb-6">Identifícate y selecciona tu sesión para ingresar directamente.</p>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre o Mesa de Moderación</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Tu Nombre</label>
               <input 
                 type="text" 
                 value={form.nombre}
                 onChange={(e) => setForm({ ...form, nombre: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold text-gray-800"
-                placeholder="Ej. Moderador Principal"
+                placeholder="Ej. Dr. García"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña del Evento</label>
               <input 
                 type="password" 
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold text-gray-800"
-                placeholder="Ingresa clave del evento"
+                placeholder="Ingresa clave"
               />
             </div>
-            <button type="submit" className="w-full bg-imeesdm-dark text-white font-bold py-2 rounded-md hover:bg-black transition-colors shadow-sm">
-              Ingresar al Foro
+            
+            <div className="pt-2">
+              <label className="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest text-center">Selecciona tu Sesión:</label>
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { id: 'Conferencia Magistral', label: 'Conferencia Magistral', icon: '🎤' },
+                  { id: 'Mesa 1', label: 'Mesa 1', icon: '👥' },
+                  { id: 'Mesa 2', label: 'Mesa 2', icon: '👥' }
+                ].map((s) => (
+                  <button 
+                    key={s.id}
+                    type="button" 
+                    onClick={() => {
+                      setFiltroSesion(s.id);
+                      // Disparar submit manualmente o esperar a que el usuario lo vea
+                    }}
+                    className={`flex items-center justify-between px-4 py-3 border-2 rounded-lg transition-all ${
+                      filtroSesion === s.id 
+                        ? 'border-imeesdm-dark bg-imeesdm-dark text-white shadow-md' 
+                        : 'border-gray-100 hover:border-imeesdm-gold hover:bg-amber-50 text-gray-700'
+                    }`}
+                  >
+                    <span className="font-bold text-sm tracking-tight">{s.label}</span>
+                    <span>{s.icon}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button 
+              type="submit" 
+              className="w-full mt-4 bg-imeesdm-gold text-imeesdm-dark font-black py-3 rounded-lg hover:brightness-110 transition-all shadow-lg uppercase tracking-widest text-sm"
+            >
+              Entrar a la Sesión
             </button>
           </form>
         </div>

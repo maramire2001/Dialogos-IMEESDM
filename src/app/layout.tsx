@@ -49,8 +49,12 @@ export default function RootLayout({
                 🔐 Administración
               </a>
               <span className="text-gray-300">|</span>
-              <a href="/moderador" className="hover:text-indigo-600 transition-colors">
+              <a href="/moderador" className="hover:text-imeesdm-dark transition-colors">
                 🧠 Moderadores
+              </a>
+              <span className="text-gray-300">|</span>
+              <a href="/satisfaccion" className="hover:text-green-600 font-bold transition-colors">
+                ⭐ Satisfacción
               </a>
             </div>
             

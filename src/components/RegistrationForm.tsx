@@ -274,15 +274,19 @@ export default function RegistrationForm() {
         </div>
       </div>
 
-      {/* CAMPOS MILITARES — se muestran para cualquiera de los 3 perfiles */}
-      {profile && (
-        <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-xl">
+      {/* CAMPOS MILITARES — se muestran para perfiles militares/discentes */}
+      {(profile === 'Militar activo' || profile === 'Militar en retiro' || profile === 'Discente') && (
+        <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-xl animate-in fade-in slide-in-from-top-2">
           <h4 className="text-sm font-bold text-imeesdm-dark uppercase mb-4 border-b pb-2">Información militar: {profile}</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Fuerza armada *</label>
-              <select required name="fuerza_armada" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold bg-white text-slate-800">
+              <select 
+                required={profile === 'Militar activo' || profile === 'Militar en retiro' || profile === 'Discente'} 
+                name="fuerza_armada" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold bg-white text-slate-800"
+              >
                 <option value="">Selecciona tu fuerza</option>
                 <option value="Ejército Mexicano">Ejército Mexicano</option>
                 <option value="Fuerza Aérea Mexicana">Fuerza Aérea Mexicana</option>
@@ -294,12 +298,24 @@ export default function RegistrationForm() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Grado *</label>
-              <input required name="grado_militar" type="text" placeholder="Ej: Capitán 1/o." className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold text-slate-800" />
+              <input 
+                required={profile === 'Militar activo' || profile === 'Militar en retiro' || profile === 'Discente'} 
+                name="grado_militar" 
+                type="text" 
+                placeholder="Ej: Capitán 1/o." 
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold text-slate-800" 
+              />
             </div>
 
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Escuela o plantel *</label>
-              <input required name="plantel" type="text" placeholder="Nombre completo de tu escuela o plantel militar" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold text-slate-800" />
+              <input 
+                required={profile === 'Militar activo' || profile === 'Militar en retiro' || profile === 'Discente'} 
+                name="plantel" 
+                type="text" 
+                placeholder="Nombre completo de tu escuela o plantel militar" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-imeesdm-gold text-slate-800" 
+              />
             </div>
 
             <div className="md:col-span-2">

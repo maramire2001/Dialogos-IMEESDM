@@ -25,7 +25,7 @@ export default function Home() {
         <div className="bg-gradient-to-r from-imeesdm-dark to-black rounded-xl p-6 text-center shadow-lg border border-gray-700 flex flex-col justify-between">
           <div>
             <span className="text-4xl block mb-2">📄</span>
-            <h3 className="text-lg font-bold text-white mb-2">Currículums y Galería</h3>
+            <h3 className="text-lg font-bold text-white mb-2">Semblanza curricular y galería</h3>
             <p className="text-gray-300 text-xs mb-4">CVs de ponentes y fotos del evento.</p>
           </div>
           <a href="/programa" className="inline-flex items-center gap-2 bg-imeesdm-gold text-imeesdm-dark font-bold px-4 py-3 rounded-lg hover:brightness-110 transition-all shadow-md w-full justify-center text-sm">

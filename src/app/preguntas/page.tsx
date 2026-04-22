@@ -4,7 +4,10 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function PreguntasPage() {
-  const [autor, setAutor] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [apellidoPaterno, setApellidoPaterno] = useState("");
+  const [apellidoMaterno, setApellidoMaterno] = useState("");
+  const [institucion, setInstitucion] = useState("");
   const [pregunta, setPregunta] = useState("");
   const [sesion, setSesion] = useState("Conferencia Magistral");
   const [enviado, setEnviado] = useState(false);
@@ -17,7 +20,17 @@ export default function PreguntasPage() {
       setRegistrado(true);
       try {
         const parsed = JSON.parse(datos);
-        if (parsed.nombre) setAutor(parsed.nombre);
+        // Intentar pre-llenar si los datos están disponibles (aunque en el registro antiguo se guardaba concatenado)
+        if (parsed.nombre) {
+          // Si el nombre viene concatenado "Apellido, Nombre", intentamos separar lo básico
+          const partes = parsed.nombre.split(', ');
+          if (partes.length === 2) {
+            setNombre(partes[1]);
+            const apellidos = partes[0].split(' ');
+            if (apellidos.length >= 1) setApellidoPaterno(apellidos[0]);
+            if (apellidos.length >= 2) setApellidoMaterno(apellidos[1]);
+          }
+        }
       } catch {}
     } else {
       setRegistrado(false);
@@ -26,13 +39,22 @@ export default function PreguntasPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!pregunta.trim()) return;
+    if (!pregunta.trim() || !nombre.trim() || !apellidoPaterno.trim() || !institucion.trim()) {
+      alert("Por favor completa todos los campos obligatorios.");
+      return;
+    }
     
     setLoading(true);
     
+    const nombreCompleto = `${apellidoPaterno} ${apellidoMaterno}, ${nombre}`;
+
     const { error } = await supabase.from("preguntas").insert([
       { 
-        autor: autor.trim() ? autor.trim() : "Anónimo", 
+        autor: nombreCompleto, // Mantener autor para compatibilidad con vistas existentes
+        nombre: nombre.trim(),
+        apellido_paterno: apellidoPaterno.trim(),
+        apellido_materno: apellidoMaterno.trim(),
+        institucion: institucion.trim(),
         pregunta: pregunta.trim(),
         sesion: sesion
       }
@@ -107,7 +129,7 @@ export default function PreguntasPage() {
               </div>
               <div className="ml-3">
                 <p className="text-sm text-green-700 font-medium">
-                  ¡Pregunta enviada exitosamente a la mesa de moderación!
+                   ¡Pregunta enviada exitosamente a la mesa de moderación!
                 </p>
               </div>
             </div>
@@ -134,19 +156,64 @@ export default function PreguntasPage() {
               </select>
             </div>
 
-            <div>
-              <label htmlFor="autor" className="block text-sm font-medium text-gray-700 mb-1">
-                Tu Nombre (Opcional)
-              </label>
-              <input
-                id="autor"
-                name="autor"
-                type="text"
-                placeholder="Si lo dejas en blanco será Anónimo"
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-imeesdm-gold focus:border-imeesdm-gold sm:text-sm"
-                value={autor}
-                onChange={(e) => setAutor(e.target.value)}
-              />
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">
+                  Nombre(s) *
+                </label>
+                <input
+                  id="nombre"
+                  required
+                  type="text"
+                  placeholder="Tu nombre"
+                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-imeesdm-gold focus:border-imeesdm-gold sm:text-sm"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="apellidoPaterno" className="block text-sm font-medium text-gray-700 mb-1">
+                    Apellido paterno *
+                  </label>
+                  <input
+                    id="apellidoPaterno"
+                    required
+                    type="text"
+                    placeholder="Apellido 1"
+                    className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-imeesdm-gold focus:border-imeesdm-gold sm:text-sm"
+                    value={apellidoPaterno}
+                    onChange={(e) => setApellidoPaterno(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="apellidoMaterno" className="block text-sm font-medium text-gray-700 mb-1">
+                    Apellido materno
+                  </label>
+                  <input
+                    id="apellidoMaterno"
+                    type="text"
+                    placeholder="Apellido 2"
+                    className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-imeesdm-gold focus:border-imeesdm-gold sm:text-sm"
+                    value={apellidoMaterno}
+                    onChange={(e) => setApellidoMaterno(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="institucion" className="block text-sm font-medium text-gray-700 mb-1">
+                  Institución de procedencia *
+                </label>
+                <input
+                  id="institucion"
+                  required
+                  type="text"
+                  placeholder="Nombre de tu institución o dependencia"
+                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-imeesdm-gold focus:border-imeesdm-gold sm:text-sm"
+                  value={institucion}
+                  onChange={(e) => setInstitucion(e.target.value)}
+                />
+              </div>
             </div>
             
             <div>
@@ -169,7 +236,7 @@ export default function PreguntasPage() {
           <div>
             <button
               type="submit"
-              disabled={loading || !pregunta.trim()}
+              disabled={loading || !pregunta.trim() || !nombre.trim()}
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-imeesdm-dark hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-imeesdm-dark disabled:bg-gray-400 transition-colors"
             >
               {loading ? "Enviando..." : "Enviar a Moderación"}
