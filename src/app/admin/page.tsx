@@ -79,14 +79,19 @@ export default function AdminDashboard() {
 
   const fetchFiles = async () => {
     setLoadingFiles(true);
-    const { data: cData } = await supabase.storage.from('event_assets').list('cvs', {
+    const { data: cData, error: cError } = await supabase.storage.from('event_assets').list('cvs', {
       limit: 100, sortBy: { column: 'created_at', order: 'desc' }
     });
+    if (cError) {
+      console.error('Error listando CVs:', cError);
+      setUploadMessage('Error al leer bucket: ' + cError.message);
+    }
     if (cData) setCvFiles(cData.filter(f => f.name !== '.emptyFolderPlaceholder'));
 
-    const { data: pData } = await supabase.storage.from('event_assets').list('galeria', {
+    const { data: pData, error: pError } = await supabase.storage.from('event_assets').list('galeria', {
       limit: 100, sortBy: { column: 'created_at', order: 'desc' }
     });
+    if (pError) console.error('Error listando fotos:', pError);
     if (pData) setPhotoFiles(pData.filter(f => f.name !== '.emptyFolderPlaceholder'));
     setLoadingFiles(false);
   };

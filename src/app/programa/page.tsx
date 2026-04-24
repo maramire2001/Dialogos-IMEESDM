@@ -7,6 +7,7 @@ export default function ProgramaPage() {
   const [cvs, setCvs] = useState<any[]>([]);
   const [photos, setPhotos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -14,26 +15,25 @@ export default function ProgramaPage() {
 
   const fetchData = async () => {
     setLoading(true);
-    
+    setError(null);
+
     // FETCH CVS
-    const { data: cvData } = await supabase.storage.from('event_assets').list('cvs', {
-      limit: 100, offset: 0, sortBy: { column: 'created_at', order: 'desc' },
-    });
-    
-    if (cvData) {
-      const validCvs = cvData.filter(f => f.name !== '.emptyFolderPlaceholder').map(f => {
-        const { data: linkData } = supabase.storage.from('event_assets').getPublicUrl(`cvs/${f.name}`);
-        return { name: f.name, url: linkData.publicUrl, created_at: f.created_at };
-      });
-      setCvs(validCvs);
+    const res = await fetch('/api/cvs');
+    if (res.ok) {
+      const data = await res.json();
+      setCvs(data);
+    } else {
+      setError('Error al cargar los currículums.');
     }
 
     // FETCH PHOTOS
-    const { data: photoData } = await supabase.storage.from('event_assets').list('galeria', {
+    const { data: photoData, error: photoError } = await supabase.storage.from('event_assets').list('galeria', {
       limit: 100, offset: 0, sortBy: { column: 'created_at', order: 'desc' },
     });
-    
-    if (photoData) {
+
+    if (photoError) {
+      console.error('Error fetching photos:', photoError);
+    } else if (photoData) {
       const validPhotos = photoData.filter(f => f.name !== '.emptyFolderPlaceholder').map(f => {
         const { data: linkData } = supabase.storage.from('event_assets').getPublicUrl(`galeria/${f.name}`);
         return { name: f.name, url: linkData.publicUrl, created_at: f.created_at };
@@ -66,6 +66,11 @@ export default function ProgramaPage() {
         <div className="p-6 bg-gray-50">
           {loading ? (
             <div className="flex justify-center items-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-imeesdm-dark"></div></div>
+          ) : error ? (
+            <div className="text-center py-12 bg-red-50 rounded-lg border border-red-200">
+              <p className="text-red-600 font-medium text-sm">{error}</p>
+              <button onClick={fetchData} className="mt-3 text-sm text-imeesdm-dark underline hover:no-underline">Reintentar</button>
+            </div>
           ) : cvs.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-lg border border-dashed border-gray-300">
               <p className="text-gray-500">Aún no se han cargado documentos.</p>
@@ -79,8 +84,7 @@ export default function ProgramaPage() {
                       <span className="text-2xl block drop-shadow-sm">📄</span>
                     </div>
                     <div className="truncate">
-                      <p className="text-sm font-bold text-gray-800 truncate">Documento PDF</p>
-                      <p className="text-xs text-gray-500">Publicado: {new Date(file.created_at).toLocaleDateString()}</p>
+                      <p className="text-sm font-bold text-gray-800 truncate">{file.name}</p>
                     </div>
                   </div>
                   <a href={file.url} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium px-3 py-2 rounded-lg text-sm transition-colors">
